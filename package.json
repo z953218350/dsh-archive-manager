@@ -3,6 +3,9 @@
   "version": "1.0.7",
   "description": "DSH Archive Manager - preview, restore, and delete archived sessions from the settings page",
   "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
   "main": "lib/index.js",
   "exports": {
     ".": {
