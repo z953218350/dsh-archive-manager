@@ -1,6 +1,6 @@
 {
   "name": "@mlgbnb/dsh-archive-manager",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "DSH Archive Manager - preview, restore, and delete archived sessions from the settings page",
   "type": "module",
   "main": "lib/index.js",

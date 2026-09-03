@@ -125,6 +125,25 @@ dsh-archive-manager/
 
 At runtime, the plugin reads `storages/workspace.json`, `storages/session_projcache.json`, and the `sessions/` directory under the DSH data root. The root is resolved using DSH's `DSH_HOME` rules and defaults to `~/.dsh`.
 
+## Configuration
+
+### trustedHosts
+
+When DSH is served through a reverse proxy (cloudflared, nginx, Caddy) with a public HTTPS domain, the archive manager API rejects non-loopback `Host` headers. The plugin **automatically inherits** the trusted-host list from DSH's `--trusted-host` flags — no extra configuration is needed.
+
+To override the inherited list, declare `trustedHosts` explicitly in `cordis.patch.yml`:
+
+```yaml
+- insert:
+    - id: archive-manager
+      name: '@mlgbnb/dsh-archive-manager'
+      config:
+        trustedHosts:
+          - dsh.example.com
+```
+
+> **Security note**: `trustedHosts` only takes effect when `socket.remoteAddress` is loopback (127.0.0.1 / ::1) — i.e. the reverse proxy or tunnel already connects to DSH over loopback. Exposing DSH directly on a public network interface will not accept remote requests even with `trustedHosts` configured.
+
 ## License
 
 MIT

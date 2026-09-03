@@ -137,3 +137,26 @@ dsh-archive-manager/
 ```
 
 插件运行时会读取 DSH 的 `storages/workspace.json`、`storages/session_projcache.json` 和 `sessions/` 目录。数据根目录由 DSH_HOME 路径解析规则决定，默认是 `~/.dsh`。
+
+---
+
+## 🔧 配置
+
+### 受信主机 (trustedHosts)
+
+当 DSH 通过反向代理（如 cloudflared、nginx、Caddy）对外提供 HTTPS 访问时，归档管理 API 会拒绝非 loopback 的 Host 头。插件会**自动继承** DSH 启动时 `--trusted-host` 参数指定的受信主机名，无需额外配置。
+
+如需显式声明（覆盖自动继承），可在 `cordis.patch.yml` 中配置：
+
+```yaml
+- insert:
+    - id: archive-manager
+      name: '@mlgbnb/dsh-archive-manager'
+      config:
+        trustedHosts:
+          - dsh.example.com
+```
+
+> **安全说明**：`trustedHosts` 仅在 `socket.remoteAddress` 为 loopback（127.0.0.1 / ::1）时生效——即反向代理或隧道已在本机与 DSH 之间建立 loopback 连接。直接暴露在公网接口上的 DSH 实例不会因为配置了 `trustedHosts` 而接受外部直连。
+
+---
